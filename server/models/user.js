@@ -30,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
       unique: true,
       validate: {
           isEmail: {
-              msg: "Email format is invalid"
+              msg: "Parameter email tidak sesuai format"
           }
       }
   },
@@ -40,7 +40,7 @@ module.exports = (sequelize, DataTypes) => {
     validate: {
         len: {
             args: [8],
-            msg: "Password must be at least 8 characters long"
+            msg: "Password minimal terdiri dari 8 karakter  "
         }
     }
 },

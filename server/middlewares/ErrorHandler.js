@@ -1,38 +1,45 @@
 const errorHandler = (error, req, res, next) => {
     console.log(error.message);
-    let status = error.status || 500
-    let message = error.message || "Internal server error"
+    let status = error.status || 500;
+    let message = error.message || "Internal server error";
+    let data = null;
 
     switch (error.name) {
         case "BadRequest":
-            status = 400
+            status = 400;
             break;
         case "Unauthorized":
-            status = 401
-            message = "Unauthorized"
+            status = 401;
+            message = "Username atau password salah";
             break;
         case "SequelizeValidationError":
         case "SequelizeUniqueConstraintError":
-            status = 400
-            message = error.errors[0].message
+            status = 400;
+            message = error.errors[0].message;
             break;
         case "InvalidToken":
+            status = 108;
+            message = "Token tidak valid atau kadaluwarsa";
+            break;
         case "JsonWebTokenError":
-            status = 401
-            message = "Invalid token"
+            status = 108;
+            message = "Token tidak valid atau kadaluwarsa";
             break;
         case "Forbidden":
-            status = 403
-            message = "You are not authorized"
+            status = 403;
+            message = "You are not authorized";
             break;
         case "NotFound":
-            status = 404
-            message = "Hero Not Found"
+            status = 404;
+            message = "User Not Found";
             break;
     }
+
     res.status(status).json({
-        message
-    })
+        status,
+        message,
+        data
+    });
 }
 
-module.exports = errorHandler
+module.exports = errorHandler;
