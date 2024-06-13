@@ -1,16 +1,22 @@
-const express = require('express')
+require("dotenv").config()
 
+const express = require('express')
+const cors = require('cors')
 const errorHandler = require('./middlewares/ErrorHandler')
 const router = require('./routes')
 
 const app = express()
-const port = 3000
+const port = process.env.PORT
 
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
-app.use(errorHandler)
+app.use(cors())
+
 app.use(router)
+app.use(errorHandler)
+app.use("./upload", express.static("upload"))
+
 
 app.listen(port, () => {
-    console.log(`Server Jalan di ${port}`)
+    console.log(`SERVER CONNECTED!`)
 })

@@ -10,7 +10,7 @@ const errorHandler = (error, req, res, next) => {
             break;
         case "Unauthorized":
             status = 401;
-            message = "Username atau password salah";
+            message = "Token tidak valid atau kadaluwarsa";
             break;
         case "SequelizeValidationError":
         case "SequelizeUniqueConstraintError":
@@ -18,10 +18,8 @@ const errorHandler = (error, req, res, next) => {
             message = error.errors[0].message;
             break;
         case "InvalidToken":
-            status = 108;
-            message = "Token tidak valid atau kadaluwarsa";
-            break;
         case "JsonWebTokenError":
+        case "TokenExpiredError":
             status = 108;
             message = "Token tidak valid atau kadaluwarsa";
             break;
@@ -33,6 +31,16 @@ const errorHandler = (error, req, res, next) => {
             status = 404;
             message = "User Not Found";
             break;
+        case "Service atau Layanan tidak ditemukan":
+            status = 102;
+            message = "Service atau Layanan tidak ditemukan";
+            break;
+        default:
+            if (error.message === "invalid signature") {
+                status = 108;
+                message = "Token tidak valid atau kadaluwarsa";
+            }
+            break;
     }
 
     res.status(status).json({
@@ -40,6 +48,7 @@ const errorHandler = (error, req, res, next) => {
         message,
         data
     });
-}
+};
 
 module.exports = errorHandler;
+
